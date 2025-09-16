@@ -19,6 +19,8 @@ public class SecondProgramm {
             System.out.println("Vous " + root + "ez");
             System.out.println("Ils " + root + "ent");
 
+        }else{
+            System.out.println("Entrez un verbe du premier groupe!! ");
         }
     }
 
