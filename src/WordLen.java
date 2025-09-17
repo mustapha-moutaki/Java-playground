@@ -12,11 +12,18 @@ public class WordLen {
         String word = sc.nextLine();
         sc.close();
         int len = word.length();
+        String[] parts = word.split("");
         ArrayList<Integer>Counter = new ArrayList<>();
 
         if(len > 3){
-            for (int i = 0; i < len; i++) {
-                if(word)
+            int count = 0;
+            for (int i = 0; i< parts.length; i++) {
+                for(int j =1; j < parts.length-1; j++){
+                    if(parts[i] == parts[j]){
+                        count ++;
+                    }
+                }
+                Counter.add(count);
             }
         }
 
