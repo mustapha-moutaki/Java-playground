@@ -11,7 +11,7 @@ public class BookImpl {
      * -1-add books
      * @param book
      */
-    void AddBook(Book book){
+    public void AddBook(Book book){
         if(book == null){
             throw new IllegalArgumentException("the book is null");
         } else if (book.getTitle() == null || book.getTitle().isEmpty()) {
@@ -24,13 +24,15 @@ public class BookImpl {
     /**
      * -2-display all books
      */
-    void displayAllbooks(){
+   public void displayAllbooks(){
         if (!booksList.isEmpty()) {
             for (Book book : booksList){
+                System.out.println("-----book n: "+ book + "========");
                 System.out.println(book.getBookId());
                 System.out.println(book.getTitle());
                 System.out.println(book.getPages());
                 System.out.println(book.getAuthor());
+                System.out.println("=============");
             }
         }else{
             System.out.println("no books available");
@@ -42,7 +44,7 @@ public class BookImpl {
      * -3- show total books
      * @return
      */
-    int showTotalBooks(){
+    public int showTotalBooks(){
         return booksList.size();
     }
 
@@ -50,7 +52,7 @@ public class BookImpl {
     /**
      * -4-filter books by number of pages
      */
-    List<Book> booksListWithFilter(int pagesNum) {
+    public List<Book> booksListWithFilter(int pagesNum) {
         List<Book> listFiltered = booksList.stream()
                 .filter(book -> book.getPages() > pagesNum)
                 .collect(Collectors.toList());
@@ -65,7 +67,7 @@ public class BookImpl {
     /**
      * -5- update book by title
      */
-    void updateBookByTitle(int id,  String newTitle){
+    public void updateBookByTitle(int id,  String newTitle){
         Book book = booksList.get(id);
         if( book== null){
             System.out.println("book not found");
@@ -81,12 +83,12 @@ public class BookImpl {
      * remove the book by id
      */
 
-    void removeBookById(int id){
+    public void removeBookById(int id){
         booksList.remove(id);
     }
 
 
-    Book searchByAuthor(String author){
+    public Book searchByAuthor(String author){
         return booksList.stream().filter(book -> book.getAuthor().equals(author)).findFirst().orElse(null);
     }
 

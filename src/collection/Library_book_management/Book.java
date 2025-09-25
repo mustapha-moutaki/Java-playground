@@ -38,6 +38,17 @@ public class Book {
     public String getTitle(){
         return this.title;
     }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "bookId=" + bookId +
+                ", title='" + title + '\'' +
+                ", pages=" + pages +
+                ", author='" + author + '\'' +
+                '}';
+    }
+
     public int getPages(){
        return this.pages;
     }
