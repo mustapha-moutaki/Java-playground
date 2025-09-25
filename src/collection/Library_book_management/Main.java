@@ -1,7 +1,4 @@
-package collection;
-
-import collection.Library_book_management.Book;
-import collection.Library_book_management.BookImpl;
+package collection.Library_book_management;
 
 public class Main {
     public static void main(String[] args) {
