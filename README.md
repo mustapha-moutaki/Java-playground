@@ -2009,9 +2009,7 @@ Intercepte la requête HTTP avant qu'elle n'arrive au Controller (ex: vérifier 
 - [ ] Architecture propre (3-layers)
 
 
-|----------------------------------|
-#        Spring Security
-|----------------------------------|
+
 
 # 🔐 Complete Spring Security Guide - 100+ Essential Concepts
 
