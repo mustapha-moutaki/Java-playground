@@ -2008,6 +2008,669 @@ Intercepte la requête HTTP avant qu'elle n'arrive au Controller (ex: vérifier 
 - [ ] Monitoring et logging
 - [ ] Architecture propre (3-layers)
 
+
+|----------------------------------|
+#        Spring Security
+|----------------------------------|
+
+# 🔐 Complete Spring Security Guide - 100+ Essential Concepts
+
+> Comprehensive checklist to master Spring Security from basics to advanced
+
+---
+
+## 🟦 A. Spring Security Fundamentals
+
+### 1. Core Concepts
+- What is Spring Security?
+- Authentication vs Authorization
+- Principal, Credentials, and Authorities
+- Security Filter Chain architecture
+- How Spring Security works internally
+
+### 2. Initial Setup
+- Add Spring Security dependency
+- Default behavior when adding Spring Security
+- Default username and password
+- Disable default security (not recommended)
+
+### 3. SecurityFilterChain (Spring Security 6+)
+- What is SecurityFilterChain?
+- Difference between old WebSecurityConfigurerAdapter (deprecated) and new approach
+- Create basic SecurityFilterChain bean
+- Configure HTTP security
+
+### 4. Authentication Architecture
+- AuthenticationManager
+- AuthenticationProvider
+- ProviderManager
+- Authentication object
+
+---
+
+## 🟩 B. Basic Authentication Methods
+
+### 5. In-Memory Authentication
+- Configure users in memory
+- InMemoryUserDetailsManager
+- **Use case**: Development and testing
+
+### 6. JDBC Authentication
+- Store users in database
+- JdbcUserDetailsManager
+- Default schema for users and authorities
+
+### 7. Custom UserDetailsService
+- Implement UserDetailsService interface
+- loadUserByUsername() method
+- Return UserDetails object
+- **Use case**: Custom user entity from database
+
+### 8. UserDetails Interface
+- Username, password, authorities
+- Account expiration, locking, credentials expiration
+- isEnabled() flag
+
+### 9. User Entity vs UserDetails
+- Separate User entity from UserDetails
+- Implement UserDetails or use adapter
+- **Best practice**: Create UserDetailsImpl wrapper
+
+---
+
+## 🟫 C. Password Management
+
+### 10. Password Encoding
+- Why never store plain text passwords
+- PasswordEncoder interface
+- BCryptPasswordEncoder (recommended)
+- Argon2PasswordEncoder, SCryptPasswordEncoder
+
+### 11. Password Encoding Configuration
+- Configure PasswordEncoder bean
+- Encode password on registration
+- Password strength validation
+
+### 12. Password Reset Flow
+- Generate reset token
+- Send reset email
+- Validate token and expiration
+- Update password securely
+
+### 13. Password History
+- Prevent password reuse
+- Store password history
+- Validate against previous passwords
+
+---
+
+## 🟧 D. Authorization & Access Control
+
+### 14. Roles vs Authorities
+- Difference between roles and authorities
+- ROLE_ prefix convention
+- GrantedAuthority interface
+
+### 15. Method Security Annotations
+- @PreAuthorize
+- @PostAuthorize
+- @Secured
+- @RolesAllowed
+- Enable with @EnableMethodSecurity
+
+### 16. URL-based Authorization
+- hasRole() vs hasAuthority()
+- hasAnyRole() and hasAnyAuthority()
+- permitAll() and denyAll()
+- authenticated() and anonymous()
+
+### 17. SpEL in Security
+- Spring Expression Language for access control
+- hasRole('ADMIN')
+- #authentication.name
+- Complex expressions
+
+### 18. Role Hierarchy
+- Configure role hierarchy
+- ROLE_ADMIN > ROLE_USER
+- Inherit permissions
+
+### 19. Custom Authorization Logic
+- Custom AccessDecisionVoter
+- Custom PermissionEvaluator
+- Complex business logic authorization
+
+---
+
+## 🟨 E. JWT (JSON Web Tokens)
+
+### 20. JWT Basics
+- What is JWT?
+- JWT structure (header, payload, signature)
+- Stateless authentication
+- JWT vs Session-based authentication
+
+### 21. JWT Components
+- Header (algorithm, type)
+- Payload (claims: sub, exp, iat)
+- Signature (secret key)
+- How JWT is verified
+
+### 22. Generate JWT Token
+- Create JWT on successful login
+- Add claims (user id, roles, email)
+- Set expiration time
+- Sign with secret key
+
+### 23. JWT Libraries
+- jjwt (io.jsonwebtoken)
+- java-jwt (auth0)
+- Configure dependencies
+
+### 24. JWT Authentication Filter
+- Extend OncePerRequestFilter
+- Extract token from Authorization header
+- Validate token signature and expiration
+- Set authentication in SecurityContext
+
+### 25. JWT Service/Utility
+- generateToken()
+- validateToken()
+- extractUsername()
+- extractClaims()
+- isTokenExpired()
+
+### 26. JWT Response
+- Return token on login
+- Token format: Bearer {token}
+- Include refresh token
+
+### 27. JWT Expiration
+- Access token (short-lived: 15min - 1h)
+- Refresh token (long-lived: days/weeks)
+- Handle expired tokens
+
+### 28. Refresh Token Flow
+- Store refresh token securely
+- Endpoint to refresh access token
+- Validate refresh token
+- Issue new access token
+
+### 29. JWT Best Practices
+- Use HTTPS only
+- Short expiration for access tokens
+- Secure secret key storage
+- Token revocation strategy
+- Claims validation
+
+### 30. JWT Security Concerns
+- XSS attacks (where to store token)
+- Token theft
+- Token in localStorage vs httpOnly cookie
+- Logout and token invalidation
+
+---
+
+## 🟪 F. OAuth2 & Social Login
+
+### 31. OAuth2 Basics
+- What is OAuth2?
+- Authorization Code Flow
+- Client Credentials Flow
+- Resource Owner, Client, Authorization Server
+
+### 32. OAuth2 Login
+- Configure OAuth2 login
+- Google authentication
+- GitHub authentication
+- Facebook authentication
+
+### 33. OAuth2 Client Configuration
+- application.yml configuration
+- client-id and client-secret
+- redirect-uri
+- scopes
+
+### 34. Custom OAuth2 User Service
+- OAuth2UserService interface
+- Extract user info from provider
+- Map to your User entity
+- Save user on first login
+
+### 35. OAuth2 Authorization Server
+- Build your own OAuth2 server
+- Spring Authorization Server
+- Issue tokens to clients
+
+---
+
+## 🟫 G. CORS Configuration
+
+### 36. CORS Basics
+- What is CORS?
+- Preflight requests (OPTIONS)
+- Why CORS errors occur
+
+### 37. Global CORS Configuration
+- Configure CORS in SecurityFilterChain
+- Allow specific origins
+- Allow credentials
+- Allowed methods and headers
+
+### 38. @CrossOrigin Annotation
+- Per-controller or per-method CORS
+- When to use annotation vs global config
+
+### 39. CORS with JWT
+- Handle preflight requests
+- Authorization header in CORS
+
+---
+
+## 🟬 H. CSRF Protection
+
+### 40. CSRF Basics
+- What is CSRF attack?
+- CSRF token mechanism
+- When CSRF protection is needed
+
+### 41. Disable CSRF
+- For stateless APIs (JWT)
+- csrf().disable()
+- When is it safe to disable?
+
+### 42. CSRF with Session-based Auth
+- Enable CSRF for form-based login
+- Include CSRF token in forms
+- CSRF token in AJAX requests
+
+---
+
+## 🟧 I. Session Management
+
+### 43. Session-based Authentication
+- How sessions work in Spring Security
+- JSESSIONID cookie
+- Session in server memory
+
+### 44. Session Configuration
+- Session creation policy
+- ALWAYS, IF_REQUIRED, NEVER, STATELESS
+- Maximum sessions per user
+
+### 45. Concurrent Session Control
+- Limit user to one session
+- sessionManagement().maximumSessions(1)
+- Handle multiple login attempts
+
+### 46. Session Fixation Protection
+- What is session fixation?
+- changeSessionId() strategy
+- Protect against session hijacking
+
+### 47. Remember Me
+- Persistent login
+- rememberMe() configuration
+- Token-based remember me
+
+---
+
+## 🟥 J. Advanced Authentication
+
+### 48. Multi-factor Authentication (MFA)
+- TOTP (Time-based One-Time Password)
+- SMS verification
+- Email verification codes
+- Google Authenticator integration
+
+### 49. Account Verification
+- Email verification on registration
+- Generate verification token
+- Verify token and activate account
+
+### 50. Account Lockout
+- Lock account after failed login attempts
+- Temporary vs permanent lockout
+- Unlock mechanisms
+
+### 51. Login Attempt Tracking
+- Track failed login attempts
+- Store in database or cache
+- Reset counter on successful login
+
+### 52. Custom Authentication Provider
+- Implement AuthenticationProvider
+- Custom authentication logic
+- Integrate external authentication service
+
+### 53. Multiple Authentication Providers
+- Configure multiple providers
+- Try each provider in sequence
+- Fallback authentication
+
+---
+
+## 🟦 K. Security Filters
+
+### 54. Security Filter Chain Order
+- Understanding filter order
+- Common filters and their positions
+- Custom filter placement
+
+### 55. OncePerRequestFilter
+- Extend OncePerRequestFilter
+- Ensure filter runs once per request
+- **Use case**: JWT validation filter
+
+### 56. Custom Security Filters
+- Create custom filter
+- Add filter to chain
+- addFilterBefore(), addFilterAfter(), addFilterAt()
+
+### 57. Exception Handling in Filters
+- Handle exceptions in security filters
+- AuthenticationEntryPoint
+- AccessDeniedHandler
+
+---
+
+## 🟩 L. Security Events & Auditing
+
+### 58. Authentication Events
+- AuthenticationSuccessEvent
+- AuthenticationFailureEvent
+- Listen with @EventListener
+
+### 59. Authorization Events
+- AuthorizationSuccessEvent
+- AuthorizationFailureEvent
+- Track access attempts
+
+### 60. Audit Logging
+- Log security events
+- Who accessed what and when
+- Store audit logs in database
+
+### 61. Security Context
+- SecurityContextHolder
+- Get current authenticated user
+- Set authentication programmatically
+
+---
+
+## 🟫 M. Testing Security
+
+### 62. Test with MockUser
+- @WithMockUser annotation
+- Mock authentication in tests
+- Test with different roles
+
+### 63. Test with Custom User
+- @WithUserDetails
+- Load real user from UserDetailsService
+- Integration tests
+
+### 64. Test Security Configuration
+- Test protected endpoints return 401/403
+- Test public endpoints accessible
+- MockMvc security setup
+
+### 65. Test Method Security
+- Test @PreAuthorize methods
+- Test authorization logic
+- Mock SecurityContext
+
+---
+
+## 🟧 N. Microservices Security
+
+### 66. Service-to-Service Authentication
+- JWT for inter-service communication
+- API keys
+- Mutual TLS (mTLS)
+
+### 67. API Gateway Security
+- Centralized authentication
+- Token validation at gateway
+- Route-based authorization
+
+### 68. Token Propagation
+- Pass JWT between services
+- RestTemplate with interceptors
+- Feign client with JWT
+
+### 69. Distributed Session
+- Spring Session with Redis
+- Share session across services
+- Session replication
+
+---
+
+## 🟨 O. Additional Security Features
+
+### 70. Content Security Policy (CSP)
+- Configure CSP headers
+- Prevent XSS attacks
+- Script sources whitelisting
+
+### 71. Security Headers
+- X-Frame-Options (clickjacking)
+- X-Content-Type-Options
+- X-XSS-Protection
+- Strict-Transport-Security (HSTS)
+
+### 72. Rate Limiting
+- Limit login attempts per IP
+- API rate limiting
+- Bucket4j integration
+
+### 73. IP Whitelisting
+- Allow requests only from specific IPs
+- hasIpAddress() expression
+- Dynamic IP filtering
+
+### 74. User Impersonation
+- Admin impersonate user
+- SwitchUserFilter
+- Security considerations
+
+### 75. Logout Handling
+- Custom logout URL
+- Logout success handler
+- Clear security context and session
+- Invalidate JWT (blacklist)
+
+### 76. Custom Login Page
+- Create custom login form
+- Configure formLogin()
+- Login success and failure handlers
+
+### 77. Custom Error Pages
+- 401 Unauthorized page
+- 403 Forbidden page
+- Custom error responses for APIs
+
+---
+
+## 🟪 P. Security Best Practices
+
+### 78. Principle of Least Privilege
+- Grant minimum necessary permissions
+- Default deny, explicit allow
+- Role-based access control
+
+### 79. Input Validation
+- Validate all user inputs
+- Prevent SQL injection
+- Prevent XSS
+
+### 80. Sensitive Data Protection
+- Encrypt sensitive data
+- Don't log passwords
+- Mask sensitive info in logs
+
+### 81. Dependency Security
+- Keep dependencies updated
+- Scan for vulnerabilities
+- Use OWASP Dependency Check
+
+### 82. HTTPS Only
+- Enforce HTTPS
+- Redirect HTTP to HTTPS
+- HSTS header
+
+### 83. Secure Configuration
+- Externalize secrets
+- Environment variables
+- Vault integration
+
+### 84. Security Monitoring
+- Monitor failed login attempts
+- Alert on suspicious activity
+- Security dashboards
+
+---
+
+## 🟫 Q. Common Security Vulnerabilities
+
+### 85. SQL Injection Prevention
+- Use parameterized queries
+- JPA/Hibernate protection
+- Never concatenate SQL
+
+### 86. XSS Prevention
+- Escape output
+- Content Security Policy
+- Input sanitization
+
+### 87. CSRF Prevention
+- Enable CSRF for stateful apps
+- Validate CSRF tokens
+- SameSite cookies
+
+### 88. Insecure Deserialization
+- Validate serialized data
+- Whitelist allowed classes
+- Avoid deserialization when possible
+
+### 89. Security Misconfiguration
+- Remove default accounts
+- Disable debug in production
+- Proper error handling
+
+### 90. Broken Authentication
+- Strong password policies
+- Account lockout
+- Session management
+
+---
+
+## 🟥 R. Real-World Scenarios
+
+### 91. E-commerce Security
+- Secure payment processing
+- PCI DSS compliance basics
+- Customer data protection
+
+### 92. Banking Application Security
+- Transaction authorization
+- Strong customer authentication
+- Fraud detection
+
+### 93. Multi-tenant Security
+- Tenant isolation
+- Data segregation
+- Tenant-specific permissions
+
+### 94. Admin Dashboard Security
+- Separate admin authentication
+- Admin role hierarchy
+- Audit all admin actions
+
+### 95. Mobile API Security
+- API keys for mobile apps
+- Certificate pinning
+- Secure token storage
+
+### 96. Public API Security
+- API keys management
+- Rate limiting per client
+- Usage tracking
+
+---
+
+## 🟧 S. Advanced Topics
+
+### 97. Custom SecurityContext
+- Implement custom security context
+- Thread-local storage
+- Async security context propagation
+
+### 98. Method-level Encryption
+- Encrypt specific fields
+- @Encrypted annotation (custom)
+- Database encryption
+
+### 99. Biometric Authentication
+- Integrate biometric verification
+- Fingerprint, face recognition
+- WebAuthn support
+
+### 100. Zero Trust Architecture
+- Never trust, always verify
+- Continuous authentication
+- Micro-segmentation
+
+### 101. Security in GraphQL
+- Secure GraphQL endpoints
+- Query complexity limits
+- Field-level authorization
+
+### 102. WebSocket Security
+- Secure WebSocket connections
+- Authentication in WebSocket
+- Authorization per message
+
+### 103. Reactive Security
+- Spring Security Reactive
+- WebFlux security
+- Reactive SecurityContext
+
+### 104. GraalVM Native Image Security
+- Security in native images
+- Reflection configuration
+- Performance considerations
+
+### 105. Compliance & Regulations
+- GDPR compliance
+- Data retention policies
+- Right to be forgotten
+- Privacy by design
+
+---
+
+## 🎯 Final Checklist
+
+- [ ] Understand authentication vs authorization
+- [ ] Implement custom UserDetailsService
+- [ ] Configure password encoding (BCrypt)
+- [ ] Implement JWT authentication
+- [ ] Refresh token mechanism
+- [ ] Role-based access control
+- [ ] Method security with @PreAuthorize
+- [ ] Handle security exceptions properly
+- [ ] Configure CORS for frontend
+- [ ] OAuth2 social login
+- [ ] Security testing
+- [ ] Audit logging
+- [ ] Rate limiting
+- [ ] Security headers configuration
+- [ ] Understand common vulnerabilities
+
+---
+
+**🔐 Master Spring Security and build secure applications!**
+
 ---
 
 **🚀 Bon apprentissage !**
